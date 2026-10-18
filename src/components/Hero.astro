@@ -1,0 +1,58 @@
+---
+import ButtonLink from './ButtonLink.astro';
+import { profile, yearsOfExperience } from '../data/profile';
+import type { Lang } from '../i18n/ui';
+import { localizePath, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  /** Número de proyectos para clientes (entradas de experiencia). */
+  projectCount: number;
+}
+
+const { lang, projectCount } = Astro.props;
+const t = useTranslations(lang);
+
+const stats = [
+  { value: `${yearsOfExperience()}+`, label: t('hero.stats.years') },
+  { value: String(projectCount), label: t('hero.stats.projects') },
+  { value: String(profile.teamLed), label: t('hero.stats.team') },
+];
+---
+
+<div class="relative overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
+  <div
+    aria-hidden="true"
+    class="absolute -top-40 -right-32 size-[28rem] rounded-full bg-brand-200/60 blur-3xl dark:bg-brand-900/40"
+  >
+  </div>
+  <div class="relative mx-auto grid max-w-5xl gap-10 px-4 py-16 sm:px-6 sm:py-24 md:grid-cols-[1fr_auto] md:items-center">
+    <div>
+      <p class="font-medium text-brand-700 dark:text-brand-300">{t('hero.greeting')}</p>
+      <h1 class="mt-2 text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl dark:text-white">{profile.name}</h1>
+      <p class="mt-3 text-lg font-medium text-zinc-900 sm:text-xl dark:text-zinc-100">{profile.role[lang]}</p>
+      <p class="mt-5 max-w-2xl text-lg text-pretty">{profile.tagline[lang]}</p>
+      <p class="mt-3 flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400">
+        <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" class="size-4">
+          <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd"></path>
+        </svg>
+        {profile.location[lang]}
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <ButtonLink href={localizePath(lang, '/#contact')}>{t('hero.cta.contact')}</ButtonLink>
+        <ButtonLink href={localizePath(lang, '/experience/')} variant="secondary">{t('hero.cta.experience')}</ButtonLink>
+      </div>
+    </div>
+
+    <dl class="grid grid-cols-3 gap-4 md:grid-cols-1 md:gap-6">
+      {
+        stats.map((stat) => (
+          <div class="flex flex-col rounded-2xl border border-zinc-200 bg-white/70 p-4 text-center backdrop-blur md:px-8 dark:border-zinc-800 dark:bg-zinc-900/60">
+            <dt class="text-xs text-zinc-500 sm:text-sm dark:text-zinc-400">{stat.label}</dt>
+            <dd class="order-first text-3xl font-bold text-brand-700 sm:text-4xl dark:text-brand-300">{stat.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</div>

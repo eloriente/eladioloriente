@@ -1,0 +1,50 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import TagList from './TagList.astro';
+import type { Lang } from '../i18n/ui';
+import { intlLocale, useTranslations } from '../i18n/utils';
+import { formatDuration, formatMonth, monthsBetween } from '../lib/format';
+
+interface Props {
+  item: CollectionEntry<'experience'>;
+  lang: Lang;
+  /** Versión resumida, sin logros ni tecnologías. */
+  compact?: boolean;
+}
+
+const { item, lang, compact = false } = Astro.props;
+const { company, client, role, start, end, summary, highlights, stack } = item.data;
+const t = useTranslations(lang);
+const locale = intlLocale[lang];
+const period = `${formatMonth(start, locale)} – ${end ? formatMonth(end, locale) : t('experience.present')}`;
+const duration = formatDuration(monthsBetween(start, end), locale);
+---
+
+<article class="relative pl-8">
+  <span
+    aria-hidden="true"
+    class:list={[
+      'absolute top-1.5 left-0 size-3.5 rounded-full border-2',
+      end ? 'border-brand-300 bg-white dark:border-brand-700 dark:bg-zinc-950' : 'border-brand-600 bg-brand-600',
+    ]}
+  ></span>
+  <p class="text-sm text-zinc-500 dark:text-zinc-400">
+    <time datetime={start}>{period}</time>
+    <span aria-hidden="true"> · </span>{duration}
+  </p>
+  <h3 class="mt-1 text-lg font-semibold text-zinc-900 dark:text-white">{role[lang]}</h3>
+  <p class="font-medium text-brand-700 dark:text-brand-300">
+    {company}{client && <span class="text-zinc-500 dark:text-zinc-400"> · {client}</span>}
+  </p>
+  <p class:list={['mt-3 text-pretty', compact && 'line-clamp-3']}>{summary[lang]}</p>
+  {
+    !compact && highlights && (
+      <ul class="mt-3 list-disc space-y-1 pl-5 marker:text-brand-500">
+        {highlights[lang].map((h) => (
+          <li>{h}</li>
+        ))}
+      </ul>
+    )
+  }
+  {!compact && <div class="mt-4"><TagList items={stack} /></div>}
+</article>

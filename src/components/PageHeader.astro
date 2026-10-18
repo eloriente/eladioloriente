@@ -1,0 +1,17 @@
+---
+interface Props {
+  title: string;
+  intro?: string;
+}
+
+const { title, intro } = Astro.props;
+---
+
+<div class="border-b border-zinc-200 bg-linear-to-b from-brand-50 to-transparent dark:border-zinc-800 dark:from-brand-950/40">
+  <div class="mx-auto max-w-5xl px-4 pt-14 pb-10 sm:px-6 sm:pt-20">
+    <slot name="before" />
+    <h1 class="text-3xl font-bold tracking-tight text-balance text-zinc-900 sm:text-5xl dark:text-white">{title}</h1>
+    {intro && <p class="mt-4 max-w-2xl text-lg text-pretty">{intro}</p>}
+    <slot />
+  </div>
+</div>

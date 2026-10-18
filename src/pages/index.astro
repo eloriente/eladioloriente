@@ -1,0 +1,29 @@
+---
+// Raíz: redirige al idioma del navegador (español por defecto).
+import { defaultLang, langs } from '../i18n/ui';
+import { localizePath } from '../i18n/utils';
+
+const fallback = localizePath(defaultLang, '/');
+---
+
+<!doctype html>
+<html lang={defaultLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Eladio Loriente</title>
+    <script is:inline define:vars={{ langs, fallback }}>
+      const preferred = (navigator.languages || [navigator.language])
+        .map((l) => l.slice(0, 2).toLowerCase())
+        .find((l) => langs.includes(l));
+      location.replace(preferred ? `/${preferred}/` : fallback);
+    </script>
+    <noscript><meta http-equiv="refresh" content={`0;url=${fallback}`} /></noscript>
+  </head>
+  <body>
+    <p>
+      {langs.map((l) => <a href={localizePath(l, '/')} hreflang={l}>{l.toUpperCase()}</a>)}
+    </p>
+  </body>
+</html>

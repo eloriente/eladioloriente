@@ -1,0 +1,148 @@
+# Experiencia profesional (extraída del CV). Fechas en formato AAAA-MM.
+# Sin `end`, el puesto se muestra como actual. El orden lo da `start`.
+
+- id: mimacom-datev
+  company: Mimacom
+  client: DATEV
+  role:
+    es: Ingeniero de software senior
+    en: Senior Software Engineer
+  start: "2026-04"
+  summary:
+    es: Plataforma integral para gestionar pagos de impuestos y presentar la declaración anual de la renta, de particulares y empresas, ante la administración tributaria alemana. Me encargo de estandarizar e implantar un sistema digital que simplifica los trámites de los contribuyentes a nivel municipal y federal.
+    en: Comprehensive platform for managing tax payments and filing annual income tax returns, for individuals and businesses, with the German tax office. I standardise and implement a digital system that streamlines taxpayers' administrative processes at municipal and federal level.
+  stack: [TypeScript, Angular 21, i18n, Storybook, Angular Material, Cypress, CI/CD, Scrum]
+
+- id: mimacom-mercedes
+  company: Mimacom
+  client: Mercedes-Benz
+  role:
+    es: Arquitecto front-end
+    en: Front-end Software Architect
+  start: "2025-10"
+  end: "2026-04"
+  summary:
+    es: Plataforma interna para verificar en detalle los componentes de fabricación de producto y comparar con IA los registros internos con los datos de proveedores. Mi objetivo fue reunir todos los casos de uso en una interfaz ágil e intuitiva para los equipos de ingeniería y diseño de producto.
+    en: Internal platform for detailed verification of product manufacturing components and AI-based comparison between internal records and supplier data. My goal was to bring every use case into a streamlined, intuitive interface for engineering and product design teams.
+  stack: [TypeScript, Next.js, i18n, Playwright, Jest, Node.js, Databricks, Azure, Scrum]
+
+- id: mimacom-santander
+  company: Mimacom
+  client: Santander
+  role:
+    es: Arquitecto front-end
+    en: Front-end Software Architect
+  start: "2025-08"
+  end: "2025-10"
+  summary:
+    es: Proyecto Flowable para el Grupo Santander. Diseñé e implementé dos soluciones nuevas y mejoré una existente, alineadas con los requisitos del cliente e integradas en un entorno de producción a nivel nacional.
+    en: Flowable project for Santander Group. I designed and implemented two new solutions and enhanced an existing one, aligned with client requirements and integrated into a nationwide production environment.
+  stack: [TypeScript, React 18, i18n, Spring Boot, Docker, Azure Blob Storage, Scrum]
+
+- id: mimacom-sabadell
+  company: Mimacom
+  client: Banco Sabadell
+  role:
+    es: Arquitecto front-end
+    en: Front-end Software Architect
+  start: "2025-04"
+  end: "2025-08"
+  summary:
+    es: Arquitectura de software en el equipo de arquitectura corporativa core de un proyecto bancario.
+    en: Software architecture within the corporate core architecture team of a banking project.
+  highlights:
+    es:
+      - Análisis técnico y arquitectura de software.
+      - Soporte a los equipos de desarrollo para implantar soluciones escalables y mantenibles.
+      - Arquitectura de microservicios y microfrontends con Webpack 5.
+    en:
+      - Technical analysis and software architecture.
+      - Support for development teams implementing scalable, maintainable solutions.
+      - Microservices and micro-frontend architecture with Webpack 5.
+  stack: [TypeScript, Angular 16, Express, Node.js, Java, Microfrontends, Webpack 5, Scrum]
+
+- id: kairosds-openbank
+  company: KairosDS
+  client: Openbank (Zinia)
+  role:
+    es: Desarrollador de software senior
+    en: Senior Software Developer
+  start: "2022-07"
+  end: "2025-04"
+  summary:
+    es: Desarrollador front-end senior en Zinia (Openbank, Grupo Santander), en proyectos internos y con clientes.
+    en: Senior front-end developer at Zinia (Openbank, Santander Group), on internal and client projects.
+  highlights:
+    es:
+      - Integración de Zinia como sistema de financiación para Apple Alemania.
+      - Sistema de pago co-branded para clientes de Amazon Alemania junto a Openbank/Santander.
+      - Plataforma interna de atención al cliente para la filial de Openbank/Santander en Reino Unido.
+      - Modernización de la plataforma de Santander/Openbank en Alemania, con foco en integración y experiencia de usuario.
+    en:
+      - Integration of Zinia as the financing system for Apple Germany.
+      - Co-branded payment system for Amazon Germany customers with Openbank/Santander.
+      - Internal customer service platform for Openbank/Santander's UK subsidiary.
+      - Modernisation of the Santander/Openbank platform in Germany, focused on integration and user experience.
+  stack: [React 18, TypeScript, Storybook, Styled Components, Jest, GitHub Actions, POEditor, SonarQube, Bamboo, Wiremock]
+
+- id: kairosds-deceye
+  company: KairosDS
+  client: Deceye
+  role:
+    es: Desarrollador de software senior
+    en: Senior Software Developer
+  start: "2022-07"
+  end: "2025-04"
+  summary:
+    es: Proyecto blockchain y Web3 centrado en el análisis de la evolución de distintas DAO y tokens. Análisis del proyecto y arquitectura de software.
+    en: Blockchain and Web3 project focused on analysing the evolution of DAOs and tokens. Project analysis and software architecture.
+  stack: [Next.js 13, Python, TypeScript, Express, Node.js, MongoDB]
+
+- id: inetum-airbus
+  company: Inetum
+  client: Airbus
+  role:
+    es: Desarrollador full stack y analista
+    en: Full Stack Developer & Software Analyst
+  start: "2022-05"
+  # REVISAR: el CV dice "May 2022 - Now"; se asume que terminó al entrar en KairosDS.
+  end: "2022-07"
+  summary:
+    es: Software para ingeniería aeronáutica. Desarrollo front-end y back-end, análisis de proyecto y arquitectura de software.
+    en: Software for aerospace engineering. Front-end and back-end development, project analysis and software architecture.
+  stack: [AngularJS, React, Next.js, TypeScript, MongoDB, PostgreSQL]
+
+- id: avantio-lead
+  company: Avantio
+  role:
+    es: Desarrollador de software y team lead
+    en: Software Developer & Team Lead
+  # REVISAR: el CV dice "October 2022 - May 2022"; se asume octubre de 2021.
+  start: "2021-10"
+  end: "2022-05"
+  summary:
+    es: Además de seguir desarrollando, lideré un equipo de 13 desarrolladores para dirigir y guiar la evolución del producto.
+    en: While still developing, I led a team of 13 developers, directing and guiding the product's development.
+  stack: [Angular, React, Node.js, MongoDB, AWS]
+
+- id: avantio-dev
+  company: Avantio
+  role:
+    es: Desarrollador de software
+    en: Software Developer
+  start: "2019-08"
+  # REVISAR: el CV dice "2022"; se asume que acaba al pasar a team lead.
+  end: "2021-10"
+  summary:
+    es: Transformación digital de un framework propio en PHP a un stack TypeScript, en software para alquiler vacacional.
+    en: Digital transformation of an in-house PHP framework into a TypeScript stack, for holiday rental software.
+  highlights:
+    es:
+      - Stack MEAN (Angular, Node.js y MongoDB) y arquitectura de microservicios con React y Angular.
+      - Integración con APIs de Airbnb, Booking y Expedia.
+      - Servicios cloud en AWS y testing con patrón AAA.
+    en:
+      - MEAN stack (Angular, Node.js and MongoDB) and microservice architecture with React and Angular.
+      - API integrations with Airbnb, Booking and Expedia.
+      - AWS cloud services and AAA-pattern testing.
+  stack: [Angular, React, Node.js, MongoDB, AWS, Microservicios]

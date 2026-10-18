@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+/* Tokens de marca: violeta, como en el CV. */
+@theme inline {
+  --color-brand-50: var(--color-violet-50);
+  --color-brand-100: var(--color-violet-100);
+  --color-brand-200: var(--color-violet-200);
+  --color-brand-300: var(--color-violet-300);
+  --color-brand-400: var(--color-violet-400);
+  --color-brand-500: var(--color-violet-500);
+  --color-brand-600: var(--color-violet-600);
+  --color-brand-700: var(--color-violet-700);
+  --color-brand-800: var(--color-violet-800);
+  --color-brand-900: var(--color-violet-900);
+  --color-brand-950: var(--color-violet-950);
+}
+
+@layer base {
+  html {
+    @apply scroll-pt-20 motion-safe:scroll-smooth;
+  }
+
+  body {
+    @apply bg-white text-zinc-700 antialiased dark:bg-zinc-950 dark:text-zinc-300;
+  }
+
+  :focus-visible {
+    @apply rounded-sm outline-2 outline-offset-2 outline-brand-600 dark:outline-brand-400;
+  }
+}
+
+/* Contenido Markdown de entradas y proyectos. */
+@layer components {
+  .prose-content {
+    @apply max-w-none text-base leading-relaxed sm:text-lg;
+
+    & > * + * {
+      @apply mt-5;
+    }
+    & h2 {
+      @apply mt-10 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white;
+    }
+    & h3 {
+      @apply mt-8 text-xl font-semibold text-zinc-900 dark:text-white;
+    }
+    & a {
+      @apply font-medium text-brand-700 underline decoration-brand-300 underline-offset-4 hover:decoration-brand-600 dark:text-brand-300 dark:decoration-brand-700;
+    }
+    & strong {
+      @apply font-semibold text-zinc-900 dark:text-white;
+    }
+    & ul {
+      @apply list-disc space-y-2 pl-6 marker:text-brand-500;
+    }
+    & ol {
+      @apply list-decimal space-y-2 pl-6 marker:text-brand-500;
+    }
+    & blockquote {
+      @apply border-l-4 border-brand-300 pl-4 italic dark:border-brand-700;
+    }
+    & :not(pre) > code {
+      @apply rounded bg-zinc-100 px-1.5 py-0.5 text-[0.9em] text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100;
+    }
+    & pre {
+      @apply overflow-x-auto rounded-xl p-4 text-sm;
+    }
+    & img {
+      @apply rounded-xl;
+    }
+  }
+}

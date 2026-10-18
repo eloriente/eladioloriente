@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactSection from '../../components/ContactSection.astro';
+import ExperienceItem from '../../components/ExperienceItem.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import TagList from '../../components/TagList.astro';
+import Timeline from '../../components/Timeline.astro';
+import { profile } from '../../data/profile';
+import type { Lang } from '../../i18n/ui';
+import { langStaticPaths, useTranslations } from '../../i18n/utils';
+import { getExperience } from '../../utils/collections';
+
+export const getStaticPaths = langStaticPaths;
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const experience = await getExperience();
+---
+
+<BaseLayout lang={lang} title={t('experience.title')} description={t('experience.intro')} path="/experience/">
+  <PageHeader title={t('experience.title')} intro={t('experience.intro')} />
+
+  <Section>
+    <Timeline>
+      {
+        experience.map((item) => (
+          <li>
+            <ExperienceItem item={item} lang={lang} />
+          </li>
+        ))
+      }
+    </Timeline>
+  </Section>
+
+  <div class="bg-zinc-50 dark:bg-zinc-900/40">
+    <Section title={t('experience.skills')}>
+      <dl class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          profile.skills.map((group) => (
+            <div class="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
+              <dt class="mb-3 font-semibold text-zinc-900 dark:text-white">{group.title[lang]}</dt>
+              <dd>
+                <TagList items={group.items} />
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </Section>
+  </div>
+
+  <Section>
+    <div class="grid gap-10 sm:grid-cols-2">
+      <div>
+        <h2 class="mb-4 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">{t('experience.education')}</h2>
+        <ul class="space-y-3">
+          {
+            profile.education.map((ed) => (
+              <li>
+                <p class="font-semibold text-zinc-900 dark:text-white">{ed.title[lang]}</p>
+                <p class="text-brand-700 dark:text-brand-300">{ed.center}</p>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400">{ed.period}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h2 class="mb-4 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">{t('experience.languages')}</h2>
+        <dl class="space-y-3">
+          {
+            profile.languages.map((l) => (
+              <div>
+                <dt class="font-semibold text-zinc-900 dark:text-white">{l.name[lang]}</dt>
+                <dd class="text-sm text-zinc-500 dark:text-zinc-400">{l.level[lang]}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+  </Section>
+
+  <ContactSection lang={lang} />
+</BaseLayout>

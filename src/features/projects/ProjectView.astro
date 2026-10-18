@@ -1,0 +1,54 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '@shared/layout/BaseLayout.astro';
+import ButtonLink from '@shared/components/ButtonLink.astro';
+import PageHeader from '@shared/components/PageHeader.astro';
+import Section from '@shared/components/Section.astro';
+import Tag from '@shared/components/Tag.astro';
+import TagList from '@shared/components/TagList.astro';
+import { localizePath, type Lang } from '@shared/i18n/languages';
+import { useProjectsTranslations } from './i18n';
+import type { Project } from './queries';
+
+interface Props {
+  project: Project;
+  lang: Lang;
+  translations: Record<Lang, string>;
+}
+
+const { project, lang, translations } = Astro.props;
+const { title, description, status, stack, repo, url } = project.data;
+const t = useProjectsTranslations(lang);
+const { Content } = await render(project);
+---
+
+<BaseLayout lang={lang} title={title} description={description} path={translations[lang]} translations={translations}>
+  <PageHeader title={title} intro={description}>
+    <a
+      slot="before"
+      href={localizePath(lang, '/projects/')}
+      class="mb-6 inline-flex gap-1.5 text-sm font-medium text-brand-700 hover:text-brand-900 dark:text-brand-300"
+    >
+      <span aria-hidden="true">←</span>
+      {t('back')}
+    </a>
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+      <Tag variant={status === 'active' ? 'brand' : 'neutral'}>{t(`status.${status}`)}</Tag>
+      <TagList items={stack} />
+    </div>
+    {
+      (url || repo) && (
+        <div class="mt-6 flex flex-wrap gap-3">
+          {url && <ButtonLink href={url} target="_blank" rel="noopener">{t('demo')}</ButtonLink>}
+          {repo && <ButtonLink href={repo} target="_blank" rel="noopener" variant="secondary">{t('repo')}</ButtonLink>}
+        </div>
+      )
+    }
+  </PageHeader>
+
+  <Section class="max-w-3xl!">
+    <div class="prose-content">
+      <Content />
+    </div>
+  </Section>
+</BaseLayout>

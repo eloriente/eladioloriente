@@ -1,61 +1,10 @@
 ---
 import type { InferGetStaticPropsType } from 'astro';
-import { getCollection, render } from 'astro:content';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import ButtonLink from '../../../components/ButtonLink.astro';
-import PageHeader from '../../../components/PageHeader.astro';
-import Section from '../../../components/Section.astro';
-import Tag from '../../../components/Tag.astro';
-import TagList from '../../../components/TagList.astro';
-import { localizePath, useTranslations } from '../../../i18n/utils';
-import { entryTranslations, splitId } from '../../../utils/collections';
+import { ProjectView, getProjectStaticPaths } from '@features/projects';
 
-export async function getStaticPaths() {
-  const projects = await getCollection('projects', ({ data }) => !data.draft);
-  return projects.flatMap((project) => {
-    const { lang, slug } = splitId(project.id);
-    if (!lang) return [];
-    return [
-      { params: { lang, slug }, props: { project, lang, translations: entryTranslations(projects, 'projects', slug) } },
-    ];
-  });
-}
+export const getStaticPaths = getProjectStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
-const { project, lang, translations } = Astro.props;
-const { title, description, status, stack, repo, url } = project.data;
-const t = useTranslations(lang);
-const { Content } = await render(project);
 ---
 
-<BaseLayout lang={lang} title={title} description={description} path={translations[lang]} translations={translations}>
-  <PageHeader title={title} intro={description}>
-    <a
-      slot="before"
-      href={localizePath(lang, '/projects/')}
-      class="mb-6 inline-flex gap-1.5 text-sm font-medium text-brand-700 hover:text-brand-900 dark:text-brand-300"
-    >
-      <span aria-hidden="true">←</span>
-      {t('projects.back')}
-    </a>
-    <div class="mt-6 flex flex-wrap items-center gap-3">
-      <Tag variant={status === 'active' ? 'brand' : 'neutral'}>{t(`projects.status.${status}`)}</Tag>
-      <TagList items={stack} />
-    </div>
-    {
-      (url || repo) && (
-        <div class="mt-6 flex flex-wrap gap-3">
-          {url && <ButtonLink href={url} target="_blank" rel="noopener">{t('projects.demo')}</ButtonLink>}
-          {repo && <ButtonLink href={repo} target="_blank" rel="noopener" variant="secondary">{t('projects.repo')}</ButtonLink>}
-        </div>
-      )
-    }
-  </PageHeader>
-
-  <Section class="max-w-3xl!">
-    <div class="prose-content">
-      <Content />
-    </div>
-  </Section>
-</BaseLayout>
+<ProjectView {...Astro.props} />

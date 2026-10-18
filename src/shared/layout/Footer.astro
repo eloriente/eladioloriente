@@ -1,0 +1,35 @@
+---
+import { profile } from '../data/profile';
+import type { Lang } from '../i18n/languages';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-zinc-200 dark:border-zinc-800">
+  <div
+    class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-8 text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between sm:px-6 dark:text-zinc-400"
+  >
+    <p>© {year} {profile.name}. {t('footer.built')}</p>
+    <ul class="flex flex-wrap gap-4">
+      <li>
+        <a href={`mailto:${profile.email}`} class="hover:text-brand-700 dark:hover:text-brand-300">{profile.email}</a>
+      </li>
+      {
+        profile.links.map((link) => (
+          <li>
+            <a href={link.url} rel="me noopener" target="_blank" class="hover:text-brand-700 dark:hover:text-brand-300">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>

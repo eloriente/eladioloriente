@@ -1,0 +1,81 @@
+---
+import BaseLayout from '@shared/layout/BaseLayout.astro';
+import ContactSection from '@shared/components/ContactSection.astro';
+import Section from '@shared/components/Section.astro';
+import { localizePath, type Lang } from '@shared/i18n/languages';
+import { PostCard, getPosts, useBlogTranslations } from '@features/blog';
+import { ExperienceItem, Timeline, getExperience, useExperienceTranslations } from '@features/experience';
+import { ProjectCard, getProjects, useProjectsTranslations } from '@features/projects';
+import Hero from './components/Hero.astro';
+import { about, yearsOfExperience } from './data';
+import { useHomeTranslations } from './i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useHomeTranslations(lang);
+const tExperience = useExperienceTranslations(lang);
+const tProjects = useProjectsTranslations(lang);
+const tBlog = useBlogTranslations(lang);
+
+const experience = await getExperience();
+const projects = (await getProjects(lang)).slice(0, 3);
+const posts = (await getPosts(lang)).slice(0, 3);
+const years = String(yearsOfExperience());
+---
+
+<BaseLayout lang={lang} path="/">
+  <Hero lang={lang} projectCount={experience.length} />
+
+  <Section id="about" title={t('about')}>
+    <div class="max-w-3xl space-y-4 text-lg text-pretty">
+      {about[lang].map((p) => <p>{p.replace('{years}', years)}</p>)}
+    </div>
+  </Section>
+
+  <div class="bg-zinc-50 dark:bg-zinc-900/40">
+    <Section title={tExperience('recent')} link={{ href: localizePath(lang, '/experience/'), label: tExperience('all') }}>
+      <Timeline>
+        {
+          experience.slice(0, 3).map((item) => (
+            <li>
+              <ExperienceItem item={item} lang={lang} compact />
+            </li>
+          ))
+        }
+      </Timeline>
+    </Section>
+  </div>
+
+  {
+    projects.length > 0 && (
+      <Section title={tProjects('featured')} link={{ href: localizePath(lang, '/projects/'), label: tProjects('all') }}>
+        <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {projects.map((project) => (
+            <li>
+              <ProjectCard project={project} lang={lang} />
+            </li>
+          ))}
+        </ul>
+      </Section>
+    )
+  }
+
+  {
+    posts.length > 0 && (
+      <Section title={tBlog('latest')} link={{ href: localizePath(lang, '/blog/'), label: tBlog('all') }}>
+        <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post) => (
+            <li>
+              <PostCard post={post} lang={lang} />
+            </li>
+          ))}
+        </ul>
+      </Section>
+    )
+  }
+
+  <ContactSection lang={lang} />
+</BaseLayout>

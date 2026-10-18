@@ -1,0 +1,36 @@
+---
+import BaseLayout from '@shared/layout/BaseLayout.astro';
+import PageHeader from '@shared/components/PageHeader.astro';
+import Section from '@shared/components/Section.astro';
+import type { Lang } from '@shared/i18n/languages';
+import ProjectCard from './components/ProjectCard.astro';
+import { useProjectsTranslations } from './i18n';
+import { getProjects } from './queries';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useProjectsTranslations(lang);
+const projects = await getProjects(lang);
+---
+
+<BaseLayout lang={lang} title={t('title')} description={t('intro')} path="/projects/">
+  <PageHeader title={t('title')} intro={t('intro')} />
+  <Section>
+    {
+      projects.length > 0 ? (
+        <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {projects.map((project) => (
+            <li>
+              <ProjectCard project={project} lang={lang} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>{t('empty')}</p>
+      )
+    }
+  </Section>
+</BaseLayout>

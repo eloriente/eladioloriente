@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import { profile } from '../data/profile';
+import { langs, localizePath, type Lang } from '../i18n/languages';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  /** Título de la página; sin él se usa nombre y rol. */
+  title?: string;
+  description?: string;
+  /** Ruta sin prefijo de idioma, p. ej. "/blog/". */
+  path: string;
+  /** Ruta equivalente en cada idioma cuando no coincide con `path`. */
+  translations?: Partial<Record<Lang, string>>;
+}
+
+const { lang, title, description, path, translations = {} } = Astro.props;
+const t = useTranslations(lang);
+
+const fullTitle = title ? `${title} · ${profile.name}` : `${profile.name} · ${profile.role[lang]}`;
+const metaDescription = description ?? t('site.description');
+const alternates = langs.map((l) => ({ lang: l, href: localizePath(l, translations[l] ?? path) }));
+const site = Astro.site;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={metaDescription} />
+    <meta name="author" content={profile.name} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_GB'} />
+    {site && <link rel="canonical" href={new URL(localizePath(lang, path), site)} />}
+    {site && alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={new URL(a.href, site)} />)}
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a
+      href="#main"
+      class="sr-only z-50 rounded-md bg-brand-700 px-4 py-2 text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+    >
+      {t('skip')}
+    </a>
+    <Header lang={lang} alternates={alternates} />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

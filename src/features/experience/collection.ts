@@ -18,5 +18,7 @@ export const experience = defineCollection({
     summary: localized,
     highlights: z.object({ es: z.array(z.string()), en: z.array(z.string()) }).optional(),
     stack: z.array(z.string()).default([]),
+    /** Enlaces externos con más detalle (notas de prensa, casos publicados...). */
+    links: z.array(z.object({ label: localized, url: z.url() })).default([]),
   }),
 });

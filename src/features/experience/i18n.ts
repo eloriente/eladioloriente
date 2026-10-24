@@ -9,6 +9,8 @@ const es = {
   languages: 'Idiomas',
   recent: 'Experiencia reciente',
   all: 'Ver toda la experiencia',
+  links: 'Más información',
+  external: '(se abre en una pestaña nueva)',
 };
 
 const en: Record<keyof typeof es, string> = {
@@ -20,6 +22,8 @@ const en: Record<keyof typeof es, string> = {
   languages: 'Languages',
   recent: 'Recent experience',
   all: 'See all experience',
+  links: 'Further reading',
+  external: '(opens in a new tab)',
 };
 
 export const useExperienceTranslations = createTranslations({ es, en });

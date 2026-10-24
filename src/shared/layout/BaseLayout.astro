@@ -1,4 +1,5 @@
 ---
+import { getImage } from 'astro:assets';
 import '../styles/global.css';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
@@ -24,6 +25,8 @@ const fullTitle = title ? `${title} · ${profile.name}` : `${profile.name} · ${
 const metaDescription = description ?? t('site.description');
 const alternates = langs.map((l) => ({ lang: l, href: localizePath(l, translations[l] ?? path) }));
 const site = Astro.site;
+// Imagen para redes sociales: JPG, más compatible que WebP en LinkedIn y otros.
+const ogImage = await getImage({ src: profile.photo, width: 800, format: 'jpg' });
 ---
 
 <!doctype html>
@@ -43,6 +46,9 @@ const site = Astro.site;
     <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_GB'} />
     {site && <link rel="canonical" href={new URL(localizePath(lang, path), site)} />}
     {site && alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={new URL(a.href, site)} />)}
+    {site && <meta property="og:image" content={new URL(ogImage.src, site)} />}
+    {site && <meta property="og:image:alt" content={profile.photoAlt[lang]} />}
+    <meta name="twitter:card" content="summary" />
     <meta name="generator" content={Astro.generator} />
   </head>
   <body class="flex min-h-dvh flex-col">

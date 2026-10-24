@@ -1,5 +1,6 @@
 // Datos personales comunes a toda la web.
 import type { Localized } from "../i18n/languages";
+import photo from "../assets/profile.png";
 
 export interface Link {
   label: string;
@@ -9,6 +10,12 @@ export interface Link {
 export const profile = {
   name: "Eladio Loriente",
   initials: "EL",
+  /** Foto de perfil; se optimiza con `astro:assets`. */
+  photo,
+  photoAlt: {
+    es: "Foto de Eladio Loriente",
+    en: "Photo of Eladio Loriente",
+  } satisfies Localized,
   email: "eladioloriente@gmail.com",
   location: {
     es: "Valencia, España",

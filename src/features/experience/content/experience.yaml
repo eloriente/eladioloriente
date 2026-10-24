@@ -84,6 +84,15 @@
       - Internal customer service platform for Openbank/Santander's UK subsidiary.
       - Modernisation of the Santander/Openbank platform in Germany, focused on integration and user experience.
   stack: [React 18, TypeScript, Storybook, Styled Components, Jest, GitHub Actions, POEditor, SonarQube, Bamboo, Wiremock]
+  links:
+    - label:
+        es: "Santander Zinia, proveedor de financiación al consumo de Apple en Alemania"
+        en: "Santander Zinia becomes provider of consumer finance services for Apple in Germany"
+      url: https://www.santander.com/en/press-room/press-releases/2024/06/santander-zinia-becomes-provider-of-consumer-finance-services-for-apple-in-germany
+    - label:
+        es: "Santander y Amazon lanzan la tarjeta Amazon Visa en Alemania"
+        en: "Santander and Amazon launch the Amazon Visa credit card in Germany"
+      url: https://www.santander.com/en/press-room/press-releases/2024/08/santander-and-amazon-launch-their-new-credit-card-amazon-visa-in-germany-which-rewards-customers-for-purchases-at-no-annual-fee
 
 - id: kairosds-deceye
   company: KairosDS

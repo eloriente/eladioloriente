@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import ButtonLink from '@shared/components/ButtonLink.astro';
 import { profile } from '@shared/data/profile';
 import { localizePath, type Lang } from '@shared/i18n/languages';
@@ -43,17 +44,29 @@ const stats = [
         <ButtonLink href={localizePath(lang, '/#contact')}>{t('cta.contact')}</ButtonLink>
         <ButtonLink href={localizePath(lang, '/experience/')} variant="secondary">{t('cta.experience')}</ButtonLink>
       </div>
+
+      <dl class="mt-10 grid max-w-xl grid-cols-3 gap-3 sm:gap-4">
+        {
+          stats.map((stat) => (
+            <div class="flex flex-col rounded-2xl border border-zinc-200 bg-white/70 px-2 py-4 text-center backdrop-blur sm:px-4 dark:border-zinc-800 dark:bg-zinc-900/60">
+              <dt class="text-xs text-balance hyphens-auto text-zinc-500 md:hyphens-manual sm:text-sm dark:text-zinc-400">{stat.label}</dt>
+              <dd class="order-first text-3xl font-bold text-brand-700 sm:text-4xl dark:text-brand-300">{stat.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
     </div>
 
-    <dl class="grid grid-cols-3 gap-4 md:grid-cols-1 md:gap-6">
-      {
-        stats.map((stat) => (
-          <div class="flex flex-col rounded-2xl border border-zinc-200 bg-white/70 p-4 text-center backdrop-blur md:px-8 dark:border-zinc-800 dark:bg-zinc-900/60">
-            <dt class="text-xs text-zinc-500 sm:text-sm dark:text-zinc-400">{stat.label}</dt>
-            <dd class="order-first text-3xl font-bold text-brand-700 sm:text-4xl dark:text-brand-300">{stat.value}</dd>
-          </div>
-        ))
-      }
-    </dl>
+    <div class="order-first justify-self-center md:order-none">
+      <Image
+        src={profile.photo}
+        alt={profile.photoAlt[lang]}
+        widths={[160, 320, 576]}
+        sizes="(min-width: 768px) 288px, 160px"
+        loading="eager"
+        fetchpriority="high"
+        class="size-40 rounded-full object-cover shadow-xl ring-8 shadow-brand-900/10 ring-brand-200 md:size-72 dark:ring-brand-900"
+      />
+    </div>
   </div>
 </div>

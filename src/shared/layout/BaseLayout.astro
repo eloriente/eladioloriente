@@ -1,6 +1,8 @@
 ---
 import { getImage } from 'astro:assets';
 import '../styles/global.css';
+// `?url&no-inline` da la URL de un archivo real (no un data URI), que es lo que esperan los buscadores.
+import logoUrl from '../assets/logo.svg?url&no-inline';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import { profile } from '../data/profile';
@@ -35,8 +37,7 @@ const ogImage = await getImage({ src: profile.photo, width: 800, format: 'jpg' }
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href={logoUrl} />
     <title>{fullTitle}</title>
     <meta name="description" content={metaDescription} />
     <meta name="author" content={profile.name} />

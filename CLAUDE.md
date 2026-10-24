@@ -40,7 +40,8 @@ src/
 │   ├── components/        # ButtonLink, Tag, TagList, Section, PageHeader, ContactSection
 │   ├── layout/            # BaseLayout, Header, Footer, LanguagePicker
 │   ├── i18n/              # languages.ts, translations.ts, ui.ts (textos comunes)
-│   ├── data/profile.ts    # nombre, rol, email, ubicación, enlaces
+│   ├── assets/            # profile.png (foto) y logo.svg (monograma "EL", usado como favicon)
+│   ├── data/profile.ts    # nombre, rol, foto, email, ubicación, enlaces
 │   ├── content/entries.ts # splitId, entryTranslations (colecciones por idioma)
 │   ├── lib/format.ts      # formato puro de fechas y duraciones
 │   └── styles/global.css
@@ -85,7 +86,10 @@ Estilos: `shared/styles/global.css` con Tailwind, tokens `@theme` (`--color-bran
 
 ## Calidad
 
-- Accesibilidad WCAG AA, HTML semántico, imágenes con `alt` y optimizadas con `astro:assets`.
+- Accesibilidad WCAG AA, HTML semántico, imágenes con `alt` traducido.
+- Imágenes en `src/` (`shared/assets/` o `features/<feature>/assets/`) y siempre con `<Image>`/`getImage()` de `astro:assets`; nunca en `public/`, que se publica sin optimizar.
+- La foto de perfil se usa en la cabecera, la portada y como `og:image` (solo si `site` está configurado).
+- Favicon: `shared/assets/logo.svg`, enlazado en `BaseLayout` con `?url&no-inline` para que sea un archivo real y no un data URI.
 - SEO: `title` y `description` únicos, Open Graph, sitemap cuando haya varias páginas.
 - Responsive mobile-first.
 

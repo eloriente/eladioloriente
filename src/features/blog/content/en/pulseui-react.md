@@ -15,19 +15,4 @@ In almost every project I've worked on, I end up building the same components: b
 - **Works alongside Tailwind CSS**: every component accepts `className` for quick tweaks.
 - **Ready for AI-assisted work**: it ships an MCP server so assistants like Claude or Copilot can look up each component's real props and examples instead of making them up.
 
-## Getting started
-
-```bash
-npm install @pulseui/react
-```
-
-```tsx
-import { Button } from "@pulseui/react";
-import "@pulseui/react/styles";
-
-export default function App() {
-  return <Button variant="primary" label="Hello world" />;
-}
-```
-
 You can browse every component in the [interactive docs](https://eloriente.github.io/pulseui-react/) and check the code on [GitHub](https://github.com/eloriente/pulseui-react).

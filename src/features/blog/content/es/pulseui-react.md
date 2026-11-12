@@ -15,4 +15,19 @@ En casi todos los proyectos en los que he trabajado acabo construyendo los mismo
 - **Convive con Tailwind CSS**: todos los componentes aceptan `className` para ajustes rápidos.
 - **Preparada para trabajar con IA**: incluye un servidor MCP para que asistentes como Claude o Copilot consulten las props y los ejemplos reales de cada componente en lugar de inventarlos.
 
+## Cómo empezar
+
+```bash
+npm install @pulseui/react
+```
+
+```tsx
+import { Button } from "@pulseui/react";
+import "@pulseui/react/styles";
+
+export default function App() {
+  return <Button variant="primary" label="Hola mundo" />;
+}
+```
+
 Puedes explorar todos los componentes en la [documentación interactiva](https://eloriente.github.io/pulseui-react/) y revisar el código en [GitHub](https://github.com/eloriente/pulseui-react).

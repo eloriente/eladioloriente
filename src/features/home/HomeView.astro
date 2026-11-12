@@ -2,9 +2,13 @@
 import BaseLayout from '@shared/layout/BaseLayout.astro';
 import ContactSection from '@shared/components/ContactSection.astro';
 import Section from '@shared/components/Section.astro';
-import { localizePath, type Lang } from '@shared/i18n/languages';
+import { getImage } from 'astro:assets';
+import { profile } from '@shared/data/profile';
+import { intlLocale, localizePath, type Lang } from '@shared/i18n/languages';
+import { useTranslations } from '@shared/i18n/ui';
+import { absoluteUrl, personSchema, webSiteSchema } from '@shared/lib/seo';
 import { PostCard, getPosts, useBlogTranslations } from '@features/blog';
-import { ExperienceItem, Timeline, getExperience, useExperienceTranslations } from '@features/experience';
+import { ExperienceItem, Timeline, getExperience, skills, useExperienceTranslations } from '@features/experience';
 import { ProjectCard, getProjects, useProjectsTranslations } from '@features/projects';
 import Hero from './components/Hero.astro';
 import { about, yearsOfExperience } from './data';
@@ -24,9 +28,32 @@ const experience = await getExperience();
 const projects = (await getProjects(lang)).slice(0, 3);
 const posts = (await getPosts(lang)).slice(0, 3);
 const years = String(yearsOfExperience());
+
+// Datos estructurados: quién es el autor y qué es el sitio (resultados enriquecidos en buscadores).
+const site = Astro.site ?? new URL(profile.url);
+const homeUrl = absoluteUrl(localizePath(lang, '/'), site);
+const photo = await getImage({ src: profile.photo, width: 800, format: 'jpg' });
+const person = personSchema({
+  name: profile.name,
+  jobTitle: profile.role[lang],
+  url: homeUrl,
+  image: absoluteUrl(photo.src, site),
+  email: profile.email,
+  locality: profile.address.locality,
+  country: profile.address.country,
+  sameAs: profile.links.map((l) => l.url),
+  knowsAbout: skills.slice(0, 2).flatMap((g) => g.items),
+});
+const webSite = webSiteSchema({
+  name: profile.name,
+  url: homeUrl,
+  description: useTranslations(lang)('site.description'),
+  inLanguage: intlLocale[lang],
+  authorId: person['@id'],
+});
 ---
 
-<BaseLayout lang={lang} path="/">
+<BaseLayout lang={lang} path="/" jsonLd={[person, webSite]}>
   <Hero lang={lang} projectCount={experience.length} />
 
   <Section id="about" title={t('about')}>

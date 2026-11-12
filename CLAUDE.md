@@ -19,7 +19,8 @@
 - `/[lang]/experience/`: línea temporal completa, habilidades, formación e idiomas.
 - `/[lang]/blog/` y `/[lang]/blog/[slug]/`: artículos y eventos.
 - `/[lang]/projects/` y `/[lang]/projects/[slug]/`: proyectos personales.
-- `/404`: página no encontrada.
+- `/404`: página no encontrada (`noindex`).
+- `/sitemap.xml` y `/robots.txt`: generados desde `features/seo`.
 
 ## Stack
 
@@ -44,13 +45,15 @@ src/
 │   ├── data/profile.ts    # nombre, rol, foto, email, ubicación, enlaces
 │   ├── content/entries.ts # splitId, entryTranslations (colecciones por idioma)
 │   ├── lib/format.ts      # formato puro de fechas y duraciones
+│   ├── lib/seo.ts         # sitemap, robots y JSON-LD (puro, con tests)
 │   └── styles/global.css
 └── features/
     ├── home/              # HomeView, Hero, data.ts (tagline, sobre mí, cifras)
     ├── experience/        # ExperienceView, ExperienceItem, Timeline, data.ts (skills, formación, idiomas), content/experience.yaml
     ├── blog/              # BlogListView, BlogPostView, PostCard, content/<lang>/<slug>.md
     ├── projects/          # ProjectListView, ProjectView, ProjectCard, content/<lang>/<slug>.md
-    └── not-found/         # NotFoundView
+    ├── not-found/         # NotFoundView
+    └── seo/               # endpoints sitemap.xml y robots.txt
 ```
 
 Cada feature sigue la misma forma (solo los archivos que necesite):
@@ -90,7 +93,7 @@ Estilos: `shared/styles/global.css` con Tailwind, tokens `@theme` (`--color-bran
 - Imágenes en `src/` (`shared/assets/` o `features/<feature>/assets/`) y siempre con `<Image>`/`getImage()` de `astro:assets`; nunca en `public/`, que se publica sin optimizar.
 - La foto de perfil se usa en la cabecera, la portada y como `og:image` (solo si `site` está configurado).
 - Favicon: `shared/assets/logo.svg`, enlazado en `BaseLayout` con `?url&no-inline` para que sea un archivo real y no un data URI.
-- SEO: `title` y `description` únicos, Open Graph, sitemap cuando haya varias páginas.
+- SEO: `title` y `description` únicos, Open Graph, canonical, `hreflang` solo entre traducciones reales (`alternateLangs`), JSON-LD (`Person`/`WebSite` en inicio, `BlogPosting` y `BreadcrumbList` en detalles), `sitemap.xml` y `robots.txt` generados. Dominio: `site` de `astro.config.mjs` o, si falta, `profile.url`.
 - Responsive mobile-first.
 
 ## Comandos

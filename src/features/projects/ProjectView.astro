@@ -6,7 +6,11 @@ import PageHeader from '@shared/components/PageHeader.astro';
 import Section from '@shared/components/Section.astro';
 import Tag from '@shared/components/Tag.astro';
 import TagList from '@shared/components/TagList.astro';
+import { translatedLangs } from '@shared/content/entries';
+import { profile } from '@shared/data/profile';
 import { localizePath, type Lang } from '@shared/i18n/languages';
+import { useTranslations } from '@shared/i18n/ui';
+import { absoluteUrl, breadcrumbSchema } from '@shared/lib/seo';
 import { useProjectsTranslations } from './i18n';
 import type { Project } from './queries';
 
@@ -20,9 +24,25 @@ const { project, lang, translations } = Astro.props;
 const { title, description, status, stack, repo, url } = project.data;
 const t = useProjectsTranslations(lang);
 const { Content } = await render(project);
+
+// Migas de pan para buscadores.
+const site = Astro.site ?? new URL(profile.url);
+const breadcrumbs = breadcrumbSchema([
+  { name: useTranslations(lang)('nav.home'), url: absoluteUrl(localizePath(lang, '/'), site) },
+  { name: t('title'), url: absoluteUrl(localizePath(lang, '/projects/'), site) },
+  { name: title, url: absoluteUrl(localizePath(lang, translations[lang]), site) },
+]);
 ---
 
-<BaseLayout lang={lang} title={title} description={description} path={translations[lang]} translations={translations}>
+<BaseLayout
+  lang={lang}
+  title={title}
+  description={description}
+  path={translations[lang]}
+  translations={translations}
+  alternateLangs={translatedLangs(translations, 'projects')}
+  jsonLd={breadcrumbs}
+>
   <PageHeader title={title} intro={description}>
     <a
       slot="before"

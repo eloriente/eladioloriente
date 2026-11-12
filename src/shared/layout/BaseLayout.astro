@@ -6,8 +6,9 @@ import logoUrl from '../assets/logo.svg?url&no-inline';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import { profile } from '../data/profile';
-import { langs, localizePath, type Lang } from '../i18n/languages';
+import { defaultLang, langs, localizePath, type Lang } from '../i18n/languages';
 import { useTranslations } from '../i18n/ui';
+import { absoluteUrl, serializeJsonLd } from '../lib/seo';
 
 interface Props {
   lang: Lang;
@@ -18,17 +19,51 @@ interface Props {
   path: string;
   /** Ruta equivalente en cada idioma cuando no coincide con `path`. */
   translations?: Partial<Record<Lang, string>>;
+  /** Idiomas con una traducción real de la página (para `hreflang`). Por defecto, todos. */
+  alternateLangs?: Lang[];
+  /** Tipo Open Graph: `article` para entradas del blog. */
+  type?: 'website' | 'article';
+  /** Fecha de publicación (solo artículos). */
+  publishedTime?: Date;
+  /** Etiquetas del artículo (Open Graph `article:tag`). */
+  tags?: string[];
+  /** Excluye la página de los buscadores (p. ej. la 404). */
+  noindex?: boolean;
+  /** Datos estructurados JSON-LD de la página. */
+  jsonLd?: object | object[];
 }
 
-const { lang, title, description, path, translations = {} } = Astro.props;
+const {
+  lang,
+  title,
+  description,
+  path,
+  translations = {},
+  alternateLangs = langs,
+  type = 'website',
+  publishedTime,
+  tags = [],
+  noindex = false,
+  jsonLd,
+} = Astro.props;
 const t = useTranslations(lang);
+
+// Dominio público: el de `astro.config.mjs` (`site`) o, si no está, el del perfil.
+const site = Astro.site ?? new URL(profile.url);
+const ogLocales: Record<Lang, string> = { es: 'es_ES', en: 'en_GB' };
 
 const fullTitle = title ? `${title} · ${profile.name}` : `${profile.name} · ${profile.role[lang]}`;
 const metaDescription = description ?? t('site.description');
+// Enlaces del selector de idioma: si falta la traducción, apuntan al listado.
 const alternates = langs.map((l) => ({ lang: l, href: localizePath(l, translations[l] ?? path) }));
-const site = Astro.site;
+// `hreflang` solo entre traducciones reales; `x-default` apunta al idioma por defecto.
+const hreflangs = alternates.filter((a) => alternateLangs.includes(a.lang));
+const xDefault = hreflangs.find((a) => a.lang === defaultLang);
+const canonical = absoluteUrl(localizePath(lang, path), site);
 // Imagen para redes sociales: JPG, más compatible que WebP en LinkedIn y otros.
 const ogImage = await getImage({ src: profile.photo, width: 800, format: 'jpg' });
+const ogImageUrl = absoluteUrl(ogImage.src, site);
+const schemas = jsonLd ? [jsonLd].flat() : [];
 ---
 
 <!doctype html>
@@ -41,15 +76,39 @@ const ogImage = await getImage({ src: profile.photo, width: 800, format: 'jpg' }
     <title>{fullTitle}</title>
     <meta name="description" content={metaDescription} />
     <meta name="author" content={profile.name} />
-    <meta property="og:type" content="website" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
+    {
+      !noindex &&
+        hreflangs.length > 1 &&
+        hreflangs.map((a) => <link rel="alternate" hreflang={a.lang} href={absoluteUrl(a.href, site)} />)
+    }
+    {!noindex && hreflangs.length > 1 && xDefault && (
+      <link rel="alternate" hreflang="x-default" href={absoluteUrl(xDefault.href, site)} />
+    )}
+    <link rel="sitemap" href="/sitemap.xml" />
+
+    <!-- Open Graph (LinkedIn, Facebook, WhatsApp...) -->
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={profile.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={metaDescription} />
-    <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_GB'} />
-    {site && <link rel="canonical" href={new URL(localizePath(lang, path), site)} />}
-    {site && alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={new URL(a.href, site)} />)}
-    {site && <meta property="og:image" content={new URL(ogImage.src, site)} />}
-    {site && <meta property="og:image:alt" content={profile.photoAlt[lang]} />}
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={ogLocales[lang]} />
+    {hreflangs.filter((a) => a.lang !== lang).map((a) => <meta property="og:locale:alternate" content={ogLocales[a.lang]} />)}
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content={String(ogImage.attributes.width ?? 800)} />
+    <meta property="og:image:height" content={String(ogImage.attributes.height ?? 800)} />
+    <meta property="og:image:alt" content={profile.photoAlt[lang]} />
+    {type === 'article' && publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+    {type === 'article' && <meta property="article:author" content={profile.name} />}
+    {type === 'article' && tags.map((tag) => <meta property="article:tag" content={tag} />)}
+
+    <!-- X / Twitter: el resto lo toma de Open Graph -->
     <meta name="twitter:card" content="summary" />
+
+    {schemas.map((schema) => <script type="application/ld+json" set:html={serializeJsonLd(schema)} />)}
     <meta name="generator" content={Astro.generator} />
   </head>
   <body class="flex min-h-dvh flex-col">

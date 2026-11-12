@@ -10,6 +10,11 @@ export interface Link {
 export const profile = {
   name: "Eladio Loriente",
   initials: "EL",
+  /**
+   * URL pública del sitio. Se usa si `site` no está en `astro.config.mjs`
+   * (canonical, hreflang, Open Graph, sitemap y robots.txt).
+   */
+  url: "https://eladioloriente.com/",
   /** Foto de perfil; se optimiza con `astro:assets`. */
   photo,
   photoAlt: {
@@ -21,6 +26,8 @@ export const profile = {
     es: "Valencia, España",
     en: "Valencia, Spain",
   } satisfies Localized,
+  /** Dirección para datos estructurados (código de país ISO 3166-1). */
+  address: { locality: "Valencia", country: "ES" },
   role: {
     es: "Desarrollador de software senior · Arquitecto front-end",
     en: "Senior Software Engineer · Front-end Architect",

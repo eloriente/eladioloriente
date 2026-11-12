@@ -16,3 +16,11 @@ export function entryTranslations(ids: string[], section: string, slug: string):
     langs.map((l) => [l, ids.includes(`${l}/${slug}`) ? `/${section}/${slug}/` : `/${section}/`]),
   ) as Record<Lang, string>;
 }
+
+/**
+ * Idiomas en los que existe la entrada (no el listado de respaldo).
+ * Sirve para emitir `hreflang` solo entre traducciones reales.
+ */
+export function translatedLangs(translations: Record<Lang, string>, section: string): Lang[] {
+  return langs.filter((l) => translations[l] !== `/${section}/`);
+}

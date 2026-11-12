@@ -1,12 +1,17 @@
 ---
+import { getImage } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '@shared/layout/BaseLayout.astro';
 import PageHeader from '@shared/components/PageHeader.astro';
 import Section from '@shared/components/Section.astro';
 import Tag from '@shared/components/Tag.astro';
 import TagList from '@shared/components/TagList.astro';
+import { translatedLangs } from '@shared/content/entries';
+import { profile } from '@shared/data/profile';
 import { intlLocale, localizePath, type Lang } from '@shared/i18n/languages';
+import { useTranslations } from '@shared/i18n/ui';
 import { formatDate } from '@shared/lib/format';
+import { absoluteUrl, blogPostingSchema, breadcrumbSchema } from '@shared/lib/seo';
 import { useBlogTranslations } from './i18n';
 import type { Post } from './queries';
 
@@ -21,9 +26,43 @@ const { title, description, date, type, event, tags } = post.data;
 const t = useBlogTranslations(lang);
 const locale = intlLocale[lang];
 const { Content } = await render(post);
+
+// Datos estructurados: artículo y migas de pan.
+const site = Astro.site ?? new URL(profile.url);
+const url = absoluteUrl(localizePath(lang, translations[lang]), site);
+const photo = await getImage({ src: profile.photo, width: 800, format: 'jpg' });
+const jsonLd = [
+  blogPostingSchema({
+    headline: title,
+    description,
+    url,
+    datePublished: date,
+    inLanguage: locale,
+    authorName: profile.name,
+    authorUrl: absoluteUrl(localizePath(lang, '/'), site),
+    image: absoluteUrl(photo.src, site),
+    keywords: tags,
+  }),
+  breadcrumbSchema([
+    { name: useTranslations(lang)('nav.home'), url: absoluteUrl(localizePath(lang, '/'), site) },
+    { name: t('title'), url: absoluteUrl(localizePath(lang, '/blog/'), site) },
+    { name: title, url },
+  ]),
+];
 ---
 
-<BaseLayout lang={lang} title={title} description={description} path={translations[lang]} translations={translations}>
+<BaseLayout
+  lang={lang}
+  title={title}
+  description={description}
+  path={translations[lang]}
+  translations={translations}
+  alternateLangs={translatedLangs(translations, 'blog')}
+  type="article"
+  publishedTime={date}
+  tags={tags}
+  jsonLd={jsonLd}
+>
   <PageHeader title={title} intro={description}>
     <a
       slot="before"
